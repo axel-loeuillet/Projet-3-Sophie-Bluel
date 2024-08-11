@@ -23,3 +23,12 @@ function genererWorks(works) {
     }
 }
 genererWorks(works)
+
+//RÉCUPÉRATION DES CATEGORIES DEPUIS L'API
+const categories = await getListOfCategories()
+console.log(categories)
+function getListOfCategories() {
+    return fetch('http://localhost:5678/api/categories')
+        .then(response => response.json())
+        .catch(error => ('Error:', error));
+}
