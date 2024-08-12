@@ -8,7 +8,7 @@ function getWorks() {
 console.log(works)
 
 //AFFICHAGE DES PROJETS DANS LA GALERIE
-function genererWorks(works) {
+function displayWorks(works) {
     for (let i = 0; i < works.length; i++) {
         const data = works[i];
         let gallery = document.querySelector(".gallery");
@@ -22,7 +22,7 @@ function genererWorks(works) {
         gallery.appendChild(figure);
     }
 }
-genererWorks(works)
+displayWorks(works)
 
 //RÉCUPÉRATION DES CATEGORIES DEPUIS L'API
 const categories = await getListOfCategories()
@@ -32,3 +32,31 @@ function getListOfCategories() {
         .then(response => response.json())
         .catch(error => ('Error:', error));
 }
+
+//CREATION DU BOUTON "TOUS"
+let category = document.querySelector(".category");
+console.log(category)
+let btnTous = document.createElement("button");
+btnTous.textContent = "Tous";
+btnTous.setAttribute("data-categorie-id", "Tous");
+category.appendChild(btnTous);
+btnTous.addEventListener("click", function () {
+})
+
+//AFFICHAGE DES BOUTONS DE CATEGORIE DANS LA GALERIE
+function displayListOfCategories(categories) {
+    for (let i = 0; i < categories.length; i++) {
+        const categorie = categories[i];
+        let btn = document.createElement("button");
+        btn.textContent = categorie.name;
+        btn.classList.add("category-btn")
+        btn.setAttribute("data-categorie-id", categorie.id)
+        category.appendChild(btn)
+        console.log(btn)
+        btn.addEventListener("click", function () {
+        })
+    }
+}
+displayListOfCategories(categories)
+
+
