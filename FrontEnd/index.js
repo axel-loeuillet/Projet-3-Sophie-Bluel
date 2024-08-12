@@ -25,7 +25,7 @@ function genererWorks(works) {
 }
 genererWorks(works)
 
-//Récupération des catégories depuis l'API
+//RÉCUPÉRATION DES PROJETS
 const categories = await getListOfCategories()
 console.log(categories)
 
@@ -35,7 +35,7 @@ function getListOfCategories() {
         .catch(error => ('Error:', error));
 }
 
-//création bouton Tous
+//CRÉATION BUTTON "TOUS"
 let category = document.querySelector(".category");
 let btnTous = document.createElement("button");
 btnTous.textContent = "Tous";
@@ -45,7 +45,7 @@ btnTous.addEventListener("click", function () {
 })
 
 
-//creation des boutons de catégories
+//CRÉATION DES FILTRES DE CATÉGORIE
 for (let i = 0; i < categories.length; i++) {
     const categorie = categories[i];
     let btn = document.createElement("button");
@@ -57,7 +57,7 @@ for (let i = 0; i < categories.length; i++) {
     })
 }
 
-//affichage de tous les projets dans la catégorie "Tous"
+//FILTRAGE DES PROJETS DANS LA CATÉGORIE "TOUS"
 const btnIdTous = document.querySelector('[data-categorie-id="Tous"]');
 btnIdTous.addEventListener("click", function () {
     const filtreIdTous = works.filter(function (works) {
@@ -67,7 +67,7 @@ btnIdTous.addEventListener("click", function () {
     genererWorks(filtreIdTous);
 });
 
-//filtrage des projets par catégories
+//FILTRAGE DES PROJETS PAR CATÉGORIE
 const btnId1 = document.querySelector('[data-categorie-id="1"]');
 const buttons = document.querySelectorAll(".category-btn")
 btnId1.addEventListener("click", function () {
@@ -88,3 +88,6 @@ buttons.forEach(function (button) {
         genererWorks(filtreId1);
     })
 });
+
+//PARTIE CONNEXION
+
