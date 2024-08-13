@@ -148,6 +148,7 @@ modalContainer.addEventListener("click", (e) => {
 })
 
 //AFFICHAGE DE LA GALLERY DANS LA MODALE
+
 for (let index = 0; index < works.length; index++) {
     const data = works[index];
 
@@ -164,3 +165,38 @@ for (let index = 0; index < works.length; index++) {
     figure.appendChild(img)
     modalContent.appendChild(figure)
 }
+
+
+//SUPPRESSION DES TRAVAUX DEPUIS LA MODALE
+function deleteWork() {
+    const AllBtnDelete = document.querySelectorAll(".fa-trash-can")
+    AllBtnDelete.forEach(trash => {
+        trash.addEventListener("click", (e) => {
+            e.preventDefault();
+            const id = trash.id
+            const token = sessionStorage.getItem("authToken")
+            fetch(`http://localhost:5678/api/works/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Erreur lors de la suppression');
+                    }
+                    // Supprimer l'élément du DOM après une suppression réussie
+                    const figureToDelete = trash.closest('figure');
+                    if (figureToDelete) {
+                        figureToDelete.remove();
+                    }
+                    console.log(`Élément avec l'id ${id} supprimé avec succès`);
+                })
+                .catch(error => {
+                    console.error('Erreur:', error);
+                })
+        })
+    })
+}
+deleteWork()
