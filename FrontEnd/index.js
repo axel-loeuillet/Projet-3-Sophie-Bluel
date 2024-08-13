@@ -147,3 +147,20 @@ modalContainer.addEventListener("click", (e) => {
     }
 })
 
+//AFFICHAGE DE LA GALLERY DANS LA MODALE
+for (let index = 0; index < works.length; index++) {
+    const data = works[index];
+
+    const modalContent = document.querySelector(".modalContent");
+    const figure = document.createElement("figure");
+    const img = document.createElement("img");
+    const span = document.createElement("span");
+    const trash = document.createElement("i")
+    trash.classList.add("fa-solid", "fa-trash-can")
+    trash.id = data.id
+    img.src = data.imageUrl
+    span.appendChild(trash)
+    figure.appendChild(span)
+    figure.appendChild(img)
+    modalContent.appendChild(figure)
+}

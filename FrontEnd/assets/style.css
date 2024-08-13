@@ -290,7 +290,7 @@ footer nav ul {
 	margin: 2em
 }
 
-/* FILTER CATEGORY */
+/* STYLE FILTER CATEGORY */
 .category {
 	display: flex;
 	justify-content: center;
@@ -321,7 +321,7 @@ footer nav ul {
 	color: white;
 }
 
-/* MODE EDITION */
+/* STYLE MODE EDITION */
 
 .banner-hidden {
 	display: flex;
@@ -346,7 +346,7 @@ footer nav ul {
 	gap: 30px;
 }
 
-/* MODALE */
+/* STYLE MODALE */
 .containerModals {
 	display: none;
 	align-items: center;
@@ -407,6 +407,7 @@ footer nav ul {
 	bottom: 40px;
 }
 
+/* STYLE GALERIE MODALE */
 .modalGallery .modalContent {
 	width: 70%;
 	display: grid;
@@ -421,4 +422,33 @@ footer nav ul {
 	position: absolute;
 	top: 100px;
 
+}
+
+.modalGallery .modalContent figure {
+	width: 100%;
+	height: 100%;
+	position: relative;
+}
+
+.modalGallery .modalContent figure img {
+	width: 100%;
+	height: 100%;
+}
+
+.modalGallery .modalContent figure span {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: absolute;
+	top: 5px;
+	right: 5px;
+	background-color: black;
+	height: 15px;
+	width: 15px;
+	cursor: pointer;
+}
+
+.modalGallery .modalContent figure span .fa-trash-can {
+	color: white;
+	font-size: 0.7rem;
 }
