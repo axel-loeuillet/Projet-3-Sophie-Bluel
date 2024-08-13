@@ -12,10 +12,9 @@ formulaireDeConnexion.addEventListener("submit", function (event) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(user)
     })
-        .then(response => response.json()) // Convertit la réponse en JSON
+        .then(response => response.json())
         .then(result => {
-            console.log(result); // Affiche le JSON parsé dans la console
-            // Vous pouvez ajouter ici du code pour traiter le résultat, par exemple :
+            console.log(result);
             if (result.token) {
                 const token = result.token
                 sessionStorage.setItem("authToken", token);
