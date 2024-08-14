@@ -131,7 +131,7 @@ if (sessionStorage.getItem("authToken")) {
 const affichageModal = document.querySelector(".modify")
 const modalContainer = document.querySelector(".containerModals")
 const closeModal = document.querySelector(".containerModals .fa-xmark")
-
+const galleryModal = document.querySelector(".galleryModal")
 affichageModal.addEventListener("click", () => {
     console.log('displayModal')
     modalContainer.style.display = "flex"
@@ -147,32 +147,32 @@ modalContainer.addEventListener("click", (e) => {
     }
 })
 
-//AFFICHAGE DE LA GALLERY DANS LA MODALE
-
-for (let index = 0; index < works.length; index++) {
-    const data = works[index];
-
-    const modalContent = document.querySelector(".modalContent");
-    const figure = document.createElement("figure");
-    const img = document.createElement("img");
-    const span = document.createElement("span");
-    const trash = document.createElement("i")
-    trash.classList.add("fa-solid", "fa-trash-can")
-    trash.id = data.id
-    img.src = data.imageUrl
-    span.appendChild(trash)
-    figure.appendChild(span)
-    figure.appendChild(img)
-    modalContent.appendChild(figure)
+//AFFICHAGE DE LA GALLERY DANS LA MODAL
+async function displayGalleryModal() {
+    galleryModal.innerHTML = ""
+    const gallery = await getWorks()
+    gallery.forEach(work => {
+        const figure = document.createElement("figure");
+        const img = document.createElement("img");
+        const span = document.createElement("span");
+        const trash = document.createElement("i")
+        trash.classList.add("fa-solid", "fa-trash-can")
+        trash.id = work.id
+        img.src = work.imageUrl
+        span.appendChild(trash)
+        figure.appendChild(span)
+        figure.appendChild(img)
+        galleryModal.appendChild(figure)
+    })
+    deleteWork()
 }
-
+displayGalleryModal()
 
 //SUPPRESSION DES TRAVAUX DEPUIS LA MODALE
 function deleteWork() {
     const AllBtnDelete = document.querySelectorAll(".fa-trash-can")
     AllBtnDelete.forEach(trash => {
         trash.addEventListener("click", (e) => {
-            e.preventDefault();
             const id = trash.id
             const token = sessionStorage.getItem("authToken")
             fetch(`http://localhost:5678/api/works/${id}`, {
@@ -181,22 +181,19 @@ function deleteWork() {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 }
+            }).then(response => {
+                if (!response.ok) {
+                    throw new Error('Erreur lors de la suppression');
+                }
+                // Supprimer l'élément du DOM après une suppression réussie
+                const figureToDelete = trash.closest('figure');
+                if (figureToDelete) {
+                    figureToDelete.remove();
+                }
+                console.log(`Élément avec l'id ${id} supprimé avec succès`);
+            }).catch(error => {
+                console.error('Erreur:', error);
             })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Erreur lors de la suppression');
-                    }
-                    // Supprimer l'élément du DOM après une suppression réussie
-                    const figureToDelete = trash.closest('figure');
-                    if (figureToDelete) {
-                        figureToDelete.remove();
-                    }
-                    console.log(`Élément avec l'id ${id} supprimé avec succès`);
-                })
-                .catch(error => {
-                    console.error('Erreur:', error);
-                })
         })
     })
 }
-deleteWork()
