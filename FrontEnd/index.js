@@ -197,3 +197,50 @@ function deleteWork() {
         })
     })
 }
+
+//AFFICHAGE DU DEUXIEME CONTENU DE LA MODALE 
+
+const btnAddPicture = document.querySelector(".modalGallery button");
+const modalAddWork = document.querySelector(".modalAddWork");
+const modalGallery = document.querySelector(".modalGallery")
+const arrowLeft = document.querySelector(".fa-arrow-left")
+const mark = document.querySelector(".modalAddWork .fa-xmark")
+
+function displayAddModal() {
+    btnAddPicture.addEventListener("click", () => {
+        modalAddWork.style.display = "flex"
+        modalGallery.style.display = "none"
+    })
+    arrowLeft.addEventListener("click", () => {
+        modalAddWork.style.display = "none"
+        modalGallery.style.display = "flex"
+    })
+    mark.addEventListener("click", () => {
+        modalContainer.style.display = "none"
+    })
+}
+displayAddModal()
+
+//PREVIEW DE L'IMAGE UPLOAD
+
+const previewImg = document.querySelector(".containerFile img")
+const inputFile = document.querySelector(".containerFile input")
+const labelFile = document.querySelector(".containerFile label")
+const iconFile = document.querySelector(".containerFile .fa-image")
+const p = document.querySelector(".containerFile p")
+
+inputFile.addEventListener("change", () => {
+    const file = inputFile.files[0]
+    console.log(file)
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            previewImg.src = e.target.result
+            previewImg.style.display = "flex"
+            labelFile.style.display = "none"
+            iconFile.style.display = "none"
+            p.style.display = "none"
+        }
+        reader.readAsDataURL(file)
+    }
+})
