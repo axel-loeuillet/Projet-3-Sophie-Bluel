@@ -244,3 +244,23 @@ inputFile.addEventListener("change", () => {
         reader.readAsDataURL(file)
     }
 })
+
+//AJOUT LISTE DES CATÉGORIES DANS L'INPUT SELECT
+async function displayCategoryModal() {
+    const select = document.querySelector(".modalAddWork select")
+    const categorys = await getListOfCategories()
+    categorys.forEach(category => {
+        const option = document.createElement("option");
+        option.value = category.id
+        option.textContent = category.name
+        select.appendChild(option)
+    })
+}
+displayCategoryModal()
+
+//REQUETE POST POUR AJOUTER UN NOUVEAU PROJET
+
+const form = document.querySelector(".modalAddWork form")
+const title = document.querySelector(".modalAddWork #title")
+const categorys = document.querySelector(".modalAddWork #category")
+
