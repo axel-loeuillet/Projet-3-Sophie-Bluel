@@ -140,6 +140,7 @@ body {
 	margin: auto;
 	font-family: 'Work Sans';
 	font-size: 14px;
+	padding-top: 15px;
 }
 
 header {
@@ -344,6 +345,23 @@ footer nav ul {
 	display: flex;
 	flex-direction: column;
 	gap: 30px;
+}
+
+/* BUTTON NAVIGATION */
+
+.cta-login {
+	text-decoration: none;
+	color: #000000;
+}
+
+.cta-projet {
+	text-decoration: none;
+	color: #000000;
+}
+
+.cta-contact {
+	text-decoration: none;
+	color: #000000;
 }
 
 /* STYLE MODALE */
@@ -598,5 +616,4 @@ footer nav ul {
 	justify-content: center;
 	margin: 2em auto;
 	margin-bottom: 5px;
-
 }

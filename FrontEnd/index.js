@@ -7,9 +7,8 @@ function getWorks() {
 }
 console.log(works)
 
-
 //AFFICHAGE DES PROJETS DANS LA GALERIE
-function genererWorks(works) {
+function displayWorks(works) {
     for (let i = 0; i < works.length; i++) {
         const data = works[i];
         let gallery = document.querySelector(".gallery");
@@ -23,7 +22,7 @@ function genererWorks(works) {
         gallery.appendChild(figure);
     }
 }
-genererWorks(works)
+displayWorks(works)
 
 //RÉCUPÉRATION DES PROJETS
 const categories = await getListOfCategories()
@@ -64,7 +63,7 @@ btnIdTous.addEventListener("click", function () {
         return works.categoryId === 1, 2, 3;
     })
     document.querySelector(".gallery").innerHTML = "";
-    genererWorks(filtreIdTous);
+    displayWorks(filtreIdTous);
 });
 
 //FILTRAGE DES PROJETS PAR CATÉGORIE
@@ -75,7 +74,7 @@ btnId1.addEventListener("click", function () {
         return works.categoryId === 1;
     })
     document.querySelector(".gallery").innerHTML = "";
-    genererWorks(filtreId1);
+    displayWorks(filtreId1);
 });
 
 buttons.forEach(function (button) {
@@ -85,7 +84,7 @@ buttons.forEach(function (button) {
             return works.categoryId === Number(dataCategoryId);
         })
         document.querySelector(".gallery").innerHTML = "";
-        genererWorks(filtreId1);
+        displayWorks(filtreId1);
     })
 });
 
@@ -133,7 +132,6 @@ const modalContainer = document.querySelector(".containerModals")
 const closeModal = document.querySelector(".containerModals .fa-xmark")
 const galleryModal = document.querySelector(".galleryModal")
 affichageModal.addEventListener("click", () => {
-    console.log('displayModal')
     modalContainer.style.display = "flex"
 })
 closeModal.addEventListener("click", () => {
@@ -141,7 +139,6 @@ closeModal.addEventListener("click", () => {
     modalContainer.style.display = "none";
 })
 modalContainer.addEventListener("click", (e) => {
-    console.log(e.target.className)
     if (e.target.className == "containerModals") {
         modalContainer.style.display = "none";
     }
@@ -199,7 +196,6 @@ function deleteWork() {
 }
 
 //AFFICHAGE DU DEUXIEME CONTENU DE LA MODALE 
-
 const btnAddPicture = document.querySelector(".modalGallery button");
 const modalAddWork = document.querySelector(".modalAddWork");
 const modalGallery = document.querySelector(".modalGallery")
@@ -222,7 +218,6 @@ function displayAddModal() {
 displayAddModal()
 
 //PREVIEW DE L'IMAGE UPLOAD
-
 const previewImg = document.querySelector(".containerFile img")
 const inputFile = document.querySelector(".containerFile input")
 const labelFile = document.querySelector(".containerFile label")
@@ -260,7 +255,62 @@ displayCategoryModal()
 
 //REQUETE POST POUR AJOUTER UN NOUVEAU PROJET
 
-const form = document.querySelector(".modalAddWork form")
+const form = document.querySelector(".modalAddWork form ")
 const title = document.querySelector(".modalAddWork #title")
 const categorys = document.querySelector(".modalAddWork #category")
+const btnForm = document.querySelector(".modalAddWork button")
 
+btnForm.addEventListener("click", (e) => {
+    e.preventDefault();
+    if (!inputFile.files[0] || !title.value || !categorys.value) {
+        alert("Veuillez remplir tous les champs requis.");
+        return;
+    }
+
+    const formData = new FormData();
+
+    formData.append("image", inputFile.files[0])
+    formData.append("title", title.value)
+    formData.append("category", categorys.value)
+
+    const token = sessionStorage.getItem("authToken")
+
+    fetch("http://localhost:5678/api/works", {
+        method: "POST",
+        body: formData,
+        headers: {
+            accept: "application/json",
+            Authorization: `Bearer ${token}`,
+        }
+    })
+
+        .then(response => response.json())
+        .then(result => {
+            //AFFICHAGE DYNAMIQUE DANS LA GALLERY 
+            console.log(result)
+            let gallery = document.querySelector(".gallery");
+            let figure = document.createElement("figure");
+            let img = document.createElement("img");
+            let figCaption = document.createElement("figcaption");
+            figCaption.textContent = result.title;
+            img.src = result.imageUrl;
+            figure.appendChild(img);
+            figure.appendChild(figCaption);
+            gallery.appendChild(figure);
+            //AFFICHAGE DYNAMIQUE DANS LA GALERIE DE LA MODALE
+            const figureModal = document.createElement("figure");
+            const imgModal = document.createElement("img");
+            const span = document.createElement("span");
+            const trash = document.createElement("i")
+            trash.classList.add("fa-solid", "fa-trash-can")
+            trash.id = result.id
+            imgModal.src = result.imageUrl
+            span.appendChild(trash)
+            figureModal.appendChild(span)
+            figureModal.appendChild(imgModal)
+            galleryModal.appendChild(figureModal)
+        })
+        .catch(erreur => {
+            console.error('Erreur :', erreur);
+        })
+});
