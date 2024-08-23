@@ -299,6 +299,7 @@ footer nav ul {
 	margin-bottom: 50px;
 	gap: 10px;
 	width: 100%;
+	cursor: pointer;
 }
 
 .category button {
@@ -360,6 +361,11 @@ footer nav ul {
 }
 
 .cta-contact {
+	text-decoration: none;
+	color: #000000;
+}
+
+.cta-logout {
 	text-decoration: none;
 	color: #000000;
 }

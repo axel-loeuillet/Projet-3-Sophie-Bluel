@@ -13,6 +13,7 @@ function displayWorks(works) {
         const data = works[i];
         let gallery = document.querySelector(".gallery");
         let figure = document.createElement("figure");
+        figure.setAttribute("data-id", data.id);
         let img = document.createElement("img");
         let figCaption = document.createElement("figcaption");
         figCaption.textContent = data.title;
@@ -104,8 +105,19 @@ if (sessionStorage.getItem("authToken")) {
     document.querySelector('body').appendChild(divBanner);
     //CHANGEMENT DU BOUTON "LOGIN" EN "LOGOUT"
     const loginBtn = document.querySelector(".cta-login")
-    loginBtn.innerText = ""
-    loginBtn.textContent = "logout"
+    const btnLogout = document.querySelector(".cta-logout")
+    if (loginBtn) {
+        loginBtn.style.display = "none"
+    }
+    if (btnLogout) {
+        btnLogout.style.display = "flex"
+        btnLogout.addEventListener("click", () => {
+            sessionStorage.removeItem("authToken");
+            window.location.href = "index.html";
+        })
+    }
+
+
     //DISPARITION DES FILTRES DE CATEGORIE
     category = document.querySelector(".category")
     category.innerText = ""
@@ -152,14 +164,14 @@ async function displayGalleryModal() {
         const figure = document.createElement("figure");
         const img = document.createElement("img");
         const span = document.createElement("span");
-        const trash = document.createElement("i")
-        trash.classList.add("fa-solid", "fa-trash-can")
-        trash.id = work.id
-        img.src = work.imageUrl
-        span.appendChild(trash)
-        figure.appendChild(span)
-        figure.appendChild(img)
-        galleryModal.appendChild(figure)
+        const trash = document.createElement("i");
+        trash.classList.add("fa-solid", "fa-trash-can");
+        trash.id = work.id;
+        img.src = work.imageUrl;
+        span.appendChild(trash);
+        figure.appendChild(span);
+        figure.appendChild(img);
+        galleryModal.appendChild(figure);
     })
     deleteWork()
 }
@@ -167,33 +179,43 @@ displayGalleryModal()
 
 //SUPPRESSION DES TRAVAUX DEPUIS LA MODALE
 function deleteWork() {
-    const AllBtnDelete = document.querySelectorAll(".fa-trash-can")
-    AllBtnDelete.forEach(trash => {
+    const allBtnDelete = document.querySelectorAll(".fa-trash-can")
+    allBtnDelete.forEach(trash => {
         trash.addEventListener("click", (e) => {
-            const id = trash.id
+            e.preventDefault()
+            const id = trash.getAttribute('id')
             const token = sessionStorage.getItem("authToken")
-            fetch(`http://localhost:5678/api/works/${id}`, {
+
+            fetch("http://localhost:5678/api/works/" + id, {
                 method: 'DELETE',
                 headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
+                    Authorization: `Bearer ${token}`
                 }
-            }).then(response => {
-                if (!response.ok) {
-                    throw new Error('Erreur lors de la suppression');
-                }
-                // Supprimer l'élément du DOM après une suppression réussie
-                const figureToDelete = trash.closest('figure');
-                if (figureToDelete) {
-                    figureToDelete.remove();
-                }
-                console.log(`Élément avec l'id ${id} supprimé avec succès`);
-            }).catch(error => {
-                console.error('Erreur:', error);
             })
+                .then(response => {
+                    if (response.ok || response.status === 204) {
+                        const figureModal = trash.closest('figure');
+                        if (figureModal) {
+                            figureModal.remove();
+                        }
+                        const galleryItem = document.querySelector(`.gallery figure[data-id="${id}"]`);
+                        if (galleryItem) {
+                            galleryItem.remove();
+                        }
+                        console.log("Le projet a été supprimé avec succès.");
+                    } else {
+                        console.error("Erreur lors de la suppression :", response.status);
+                    }
+                })
+                .catch(error => {
+                    console.error("Une erreur s'est produite :", error);
+                });
         })
     })
 }
+
+
+
 
 //AFFICHAGE DU DEUXIEME CONTENU DE LA MODALE 
 const btnAddPicture = document.querySelector(".modalGallery button");
@@ -287,7 +309,6 @@ btnForm.addEventListener("click", (e) => {
         .then(response => response.json())
         .then(result => {
             //AFFICHAGE DYNAMIQUE DANS LA GALLERY 
-            console.log(result)
             let gallery = document.querySelector(".gallery");
             let figure = document.createElement("figure");
             let img = document.createElement("img");
@@ -309,6 +330,18 @@ btnForm.addEventListener("click", (e) => {
             figureModal.appendChild(span)
             figureModal.appendChild(imgModal)
             galleryModal.appendChild(figureModal)
+            //RESET DU FORMULAIRE
+            // Réinitialisation du formulaire
+            title.value = "";
+            categorys.value = "";
+            inputFile.value = "";
+            previewImg.src = "";
+            previewImg.style.display = "none";
+            labelFile.style.display = "block";
+            iconFile.style.display = "block";
+            p.style.display = "block";
+
+            deleteWork()
         })
         .catch(erreur => {
             console.error('Erreur :', erreur);
