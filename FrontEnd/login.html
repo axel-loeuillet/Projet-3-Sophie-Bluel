@@ -11,7 +11,7 @@
         rel="stylesheet">
     <meta name="description" content="">
     <link rel="stylesheet" href="./assets/style.css">
-    <script src="login.js" defer></script>
+    <script src="login.js" type="module" defer></script>
 </head>
 
 <body>
@@ -27,7 +27,7 @@
         </nav>
     </header>
     <main class="main-login">
-        <section id="contact">
+        <section id="form-login">
             <h2>Log In</h2>
             <form novalidate action="#" method="post" id="login-form">
                 <label for="email">E-mail</label>
@@ -36,13 +36,14 @@
                 <input type="password" name="password" id="password">
                 <input type="submit" value="Se connecter" class="login">
             </form>
-            <p class="forgetpass">Mot de passe oublié</p>
+            <p><a href="#" class="forgetpass">Mot de passe oublié</a></p>
         </section>
     </main>
+
     <footer>
         <nav>
             <ul>
-                <li>Mentions légales</li>
+                <li>Mentions Légales</li>
             </ul>
         </nav>
     </footer>

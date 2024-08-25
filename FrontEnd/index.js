@@ -25,7 +25,7 @@ function displayWorks(works) {
 }
 displayWorks(works)
 
-//RÉCUPÉRATION DES PROJETS
+//RÉCUPÉRATION DES CATÉGORIES
 const categories = await getListOfCategories()
 console.log(categories)
 
@@ -103,21 +103,14 @@ if (sessionStorage.getItem("authToken")) {
     paragraph.prepend(icon);
     divBanner.appendChild(paragraph)
     document.querySelector('body').appendChild(divBanner);
+    document.querySelector("header").style.marginTop = "100px"
     //CHANGEMENT DU BOUTON "LOGIN" EN "LOGOUT"
     const loginBtn = document.querySelector(".cta-login")
-    const btnLogout = document.querySelector(".cta-logout")
-    if (loginBtn) {
-        loginBtn.style.display = "none"
-    }
-    if (btnLogout) {
-        btnLogout.style.display = "flex"
-        btnLogout.addEventListener("click", () => {
-            sessionStorage.removeItem("authToken");
-            window.location.href = "index.html";
-        })
-    }
-
-
+    loginBtn.innerText = ""
+    loginBtn.textContent = "logout"
+    loginBtn.addEventListener("click", (e) => {
+        sessionStorage.removeItem("authToken");
+    })
     //DISPARITION DES FILTRES DE CATEGORIE
     category = document.querySelector(".category")
     category.innerText = ""
@@ -331,7 +324,6 @@ btnForm.addEventListener("click", (e) => {
             figureModal.appendChild(imgModal)
             galleryModal.appendChild(figureModal)
             //RESET DU FORMULAIRE
-            // Réinitialisation du formulaire
             title.value = "";
             categorys.value = "";
             inputFile.value = "";
